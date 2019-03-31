@@ -1,13 +1,17 @@
 package validator;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.*;
 
+@RunWith(JUnitParamsRunner.class)
 public class PolishIdValidatorTest {
 
-    Validator idValidator;
+    private Validator idValidator;
 
     @Before
     public void before() {
@@ -15,8 +19,8 @@ public class PolishIdValidatorTest {
     }
 
     @Test
-    public void testPositiveIdNumber() {
-        String id = "CFI729542";
+    @Parameters({"ALI524338", "CFI729542", "AKW555665"})
+    public void testPositiveIdNumber(String id) {
         assertThat(idValidator.validate(id)).isTrue();
     }
 
