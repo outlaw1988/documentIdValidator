@@ -1,7 +1,9 @@
 package validator;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class PolishIdValidator implements Validator {
 
@@ -20,30 +22,19 @@ public class PolishIdValidator implements Validator {
 
         int[] ints = convertToIntArray(id.toCharArray());
         int checkSum = computeCheckSum(ints);
-        //System.out.println("Check sum is: " + checkSum);
         return checkSum % 10 == 0;
     }
 
     private int computeCheckSum(int[] numbers) {
-        int result = 0;
-        for (int i = 0; i < numbers.length; i++) {
-            result += numbers[i] * weights[i];
-        }
-        return result;
+        return IntStream.range(0, numbers.length)
+                .map(i -> numbers[i] * weights[i])
+                .sum();
     }
 
     private int[] convertToIntArray(char[] charArray) {
-        int[] output = new int[9];
-
-        for (int i = 0; i < 3; i++) {
-            output[i] = lettersToIntegerMap.get(charArray[i]);
-        }
-
-        for (int i = 3; i < 9; i++) {
-            output[i] = Character.getNumericValue(charArray[i]);
-        }
-
-        return output;
+        return IntStream.range(0, charArray.length)
+                .map(i -> lettersToIntegerMap.get(charArray[i]))
+                .toArray();
     }
 
     private boolean isIdCorrect(String id) {
@@ -56,6 +47,12 @@ public class PolishIdValidator implements Validator {
 
         for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
             lettersToIntegerMap.put(alphabet, counter);
+            counter++;
+        }
+
+        counter = 0;
+        for (char digit = '0'; digit <= '9'; digit++) {
+            lettersToIntegerMap.put(digit, counter);
             counter++;
         }
     }
