@@ -1,6 +1,5 @@
 package validator;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -42,17 +41,15 @@ public class PolishIdValidator implements Validator {
     }
 
     private void initializeMap() {
-        int counter = 10;
         lettersToIntegerMap = new HashMap<>();
-
-        for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
-            lettersToIntegerMap.put(alphabet, counter);
+        int counter = 0;
+        for (char digit = '0'; digit <= '9'; digit++) {
+            lettersToIntegerMap.put(digit, counter);
             counter++;
         }
 
-        counter = 0;
-        for (char digit = '0'; digit <= '9'; digit++) {
-            lettersToIntegerMap.put(digit, counter);
+        for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
+            lettersToIntegerMap.put(alphabet, counter);
             counter++;
         }
     }
