@@ -1,22 +1,26 @@
+import picocli.CommandLine;
+import picocli.CommandLine.*;
 import validator.PolishIdValidator;
 import validator.Validator;
 
-import java.util.Scanner;
-
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter the id number:");
-        String idNumber = sc.next();
-        Validator validator = new PolishIdValidator();
-        boolean isValid = validator.validate(idNumber);
+    @Option(names = { "-i", "--id" }, description = "ID number")
+    private static String id;
 
-        if (isValid) {
-            System.out.println("You're id number is correct");
-        } else {
-            System.out.println("You're id number is incorrect");
+    @Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help and exit")
+    private static boolean help;
+
+    public static void main(String[] args) {
+        Main app = CommandLine.populateCommand(new Main(), args);
+        if (help || args.length == 0) {
+            CommandLine.usage(new Main(), System.out);
+            return;
         }
+        Validator idValidator = new PolishIdValidator();
+        boolean isValid = idValidator.validate(id);
+        if (isValid) System.out.println(String.format("Passed ID number %s is correct.", id));
+        else System.out.println(String.format("Passed ID number %s is incorrect.", id));
     }
 
 }
